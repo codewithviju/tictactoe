@@ -7,7 +7,50 @@ const Game = () => {
 
     const [sells, setSells] = useState(Array(9).fill(''));
 
+    const [winner, setWinner] = useState();
+
+    //Check Winner Logic
+
+    const HandleWinnder = (squares) => {
+
+        let combos = {
+            across: [
+                [0, 1, 2],
+                [3, 4, 5],
+                [6, 7, 8]
+
+            ],
+            down: [
+                [0, 3, 6],
+                [1, 4, 7],
+                [2, 5, 8]
+
+            ],
+            diagnol: [
+                [0, 4, 8],
+                [2, 4, 6]
+
+            ]
+        };
+
+        for (let combo in combos) {
+            combos[combo].forEach(element => {
+                if (squares[element[0]] === '' || squares[element[0]] === '' || squares[element[0]] === '') {
+
+                }
+                else if (squares[element[0]] === squares[element[1]] && squares[element[1]] === squares[element[2]]) {
+                    setWinner(squares[element[0]])
+                }
+            });
+        }
+    }
+
     const HandleClick = (num) => {
+
+        if (sells[num] !== '') {
+
+            return;
+        }
 
         let squares = [...sells];
 
@@ -19,8 +62,14 @@ const Game = () => {
             squares[num] = 'O';
             setTurn('X')
         }
+        HandleWinnder(squares)
         setSells(squares);
-        console.log(squares)
+
+    }
+
+    const handleRestart = () => {
+        setWinner(null)
+        setSells(Array(9).fill(''))
     }
 
     const Cell = ({ num }) => {
@@ -30,7 +79,7 @@ const Game = () => {
         <>
             <div className="container">
                 <table>
-                    Turn : {turn}
+
                     <tbody>
                         <tr>
 
@@ -55,6 +104,13 @@ const Game = () => {
                         </tr>
                     </tbody>
                 </table>
+
+                {winner && (
+                    <>
+                        <p>{winner} is Winner !</p>
+                        <button onClick={() => handleRestart()}>Play Again</button>
+                    </>
+                )}
             </div>
 
         </>
